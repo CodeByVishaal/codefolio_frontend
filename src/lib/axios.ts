@@ -43,7 +43,7 @@ api.interceptors.response.use(
 
         // Only intercept 401s that haven't already been retried.
         // _retry flag prevents infinite refresh loops.
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && originalRequest._retry) {
             if (isRefreshing) {
                 // A refresh is already in progress — queue this request and wait
                 return new Promise((resolve, reject) => {
