@@ -47,8 +47,8 @@ export function Sidebar() {
             {/* ── Brand ───────────────────────────────────────────────── */}
             <div className="flex h-14 items-center border-b border-sidebar-border px-5">
                 <span className="font-mono text-sm font-semibold tracking-tight select-none">
-                    <span className="text-primary">Dev</span>
-                    <span className="text-foreground">Pulse</span>
+                    <span className="text-primary">Code</span>
+                    <span className="text-foreground">Folio</span>
                 </span>
             </div>
 

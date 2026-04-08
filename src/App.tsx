@@ -5,6 +5,9 @@ import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
 import { Dashboard } from '@/pages/Dashboard';
 import { Placeholder } from '@/pages/Placeholder';
+import { ProjectDetail } from '@/pages/ProjectDetail';
+import { Projects } from '@/pages/Projects';
+import { Tasks } from '@/pages/Tasks';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 export default function App() {
@@ -23,8 +26,9 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/projects" element={<Placeholder page="Projects" />} />
-              <Route path="/tasks" element={<Placeholder page="Tasks" />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:id" element={<ProjectDetail />} />
+              <Route path="/tasks" element={<Tasks />} />
               <Route path="/sessions" element={<Placeholder page="Sessions" />} />
               <Route path="/journal" element={<Placeholder page="Journal" />} />
               <Route path="/analytics" element={<Placeholder page="Analytics" />} />
