@@ -9,6 +9,8 @@ import { ProjectDetail } from '@/pages/ProjectDetail';
 import { Projects } from '@/pages/Projects';
 import { Tasks } from '@/pages/Tasks';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Sessions } from './pages/Sessions';
+import { Journal } from './pages/Journal';
 
 export default function App() {
   return (
@@ -29,8 +31,8 @@ export default function App() {
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/tasks" element={<Tasks />} />
-              <Route path="/sessions" element={<Placeholder page="Sessions" />} />
-              <Route path="/journal" element={<Placeholder page="Journal" />} />
+              <Route path="/sessions" element={<Sessions />} />
+              <Route path="/journal" element={<Journal />} />
               <Route path="/analytics" element={<Placeholder page="Analytics" />} />
               <Route path="/profile" element={<Placeholder page="Profile" />} />
             </Route>

@@ -41,8 +41,8 @@ export interface ProjectUpdateInput {
 
 // ── Task ─────────────────────────────────────────────────────────────────
 
-export type TaskStatus = 'todo' | 'in_progress' | 'in_review' | 'done' | 'cancelled';
-export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
+export type TaskStatus = 'todo' | 'in_progress' | 'done';
+export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface Task {
     id: number;

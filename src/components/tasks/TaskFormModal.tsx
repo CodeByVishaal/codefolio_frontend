@@ -21,16 +21,13 @@ interface TaskFormModalProps {
 const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
     { value: 'todo', label: 'To Do' },
     { value: 'in_progress', label: 'In Progress' },
-    { value: 'in_review', label: 'In Review' },
     { value: 'done', label: 'Done' },
-    { value: 'cancelled', label: 'Cancelled' },
 ];
 
 const PRIORITY_OPTIONS: { value: TaskPriority; label: string }[] = [
     { value: 'low', label: 'Low' },
     { value: 'medium', label: 'Medium' },
     { value: 'high', label: 'High' },
-    { value: 'urgent', label: 'Urgent' },
 ];
 
 export function TaskFormModal({
@@ -121,7 +118,7 @@ export function TaskFormModal({
                                 <SelectContent>
                                     {projects.map((p) => (
                                         <SelectItem key={p.id} value={String(p.id)}>
-                                            {p.name}
+                                            {p.title}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
