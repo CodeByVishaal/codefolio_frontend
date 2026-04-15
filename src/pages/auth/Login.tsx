@@ -73,8 +73,8 @@ export function Login() {
                                 <Terminal className="w-5 h-5 text-primary" />
                             </div>
                             <span className="text-2xl font-bold tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                                <span className="text-primary">Dev</span>
-                                <span className="text-foreground">Pulse</span>
+                                <span className="text-primary">Code</span>
+                                <span className="text-foreground">Folio</span>
                             </span>
                         </div>
                         <p className="text-muted-foreground text-lg leading-relaxed">
@@ -90,7 +90,7 @@ export function Login() {
                         style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "13px" }}
                     >
                         <div className="text-muted-foreground">
-                            <span className="text-primary">$</span> devpulse stats --week
+                            <span className="text-primary">$</span> codefolio stats --week
                         </div>
                         <div className="text-muted-foreground/70 space-y-1 text-xs">
                             <div>
@@ -126,8 +126,8 @@ export function Login() {
                         <div className="flex items-center justify-center gap-2">
                             <Terminal className="w-5 h-5 text-primary" />
                             <span className="text-xl font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                                <span className="text-primary">Dev</span>
-                                <span className="text-foreground">Pulse</span>
+                                <span className="text-primary">Code</span>
+                                <span className="text-foreground">Folio</span>
                             </span>
                         </div>
                     </div>

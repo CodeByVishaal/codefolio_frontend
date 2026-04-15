@@ -56,8 +56,8 @@ export function Register() {
             <div className="w-full max-w-sm space-y-6">
                 <div className="text-center space-y-1">
                     <span className="font-mono text-2xl font-semibold">
-                        <span className="text-primary">Dev</span>
-                        <span className="text-foreground">Pulse</span>
+                        <span className="text-primary">Code</span>
+                        <span className="text-foreground">Folio</span>
                     </span>
                     <p className="text-sm text-muted-foreground">Create your developer workspace</p>
                 </div>
