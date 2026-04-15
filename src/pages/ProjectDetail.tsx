@@ -22,7 +22,7 @@ export function ProjectDetail() {
 
     const {
         projects, isLoading: projectsLoading,
-        updateProject, deleteProject,
+        updateProject,
     } = useProjects();
 
     const {

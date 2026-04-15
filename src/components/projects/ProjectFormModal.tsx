@@ -11,7 +11,7 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import type { Project, ProjectCreateInput, ProjectUpdateInput, ProjectStatus, UIProjectStatus } from '@/types/projects';
+import type { Project, ProjectCreateInput, ProjectUpdateInput } from '@/types/projects';
 import { useEffect, useState } from 'react';
 
 interface ProjectFormModalProps {
@@ -30,20 +30,7 @@ const STATUS_OPTIONS = [
     { value: 'completed', label: 'Completed' },
 ];
 
-function mapStatusToAPI(status: UIProjectStatus): ProjectStatus {
-    switch (status) {
-        case 'active':
-            return 'in_progress';
-        case 'planning':
-            return 'planning';
-        case 'completed':
-            return 'completed';
-        case 'on_hold':
-            return 'on_hold';
-        default:
-            return 'planning';
-    }
-}
+
 export function ProjectFormModal({
     open, onClose, project, onCreate, onUpdate,
 }: ProjectFormModalProps) {

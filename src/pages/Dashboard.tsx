@@ -6,7 +6,7 @@ import {
 import {
     FolderKanban, CheckSquare, Clock, BookOpen,
     Flame, Trophy, Terminal, ArrowRight,
-    TrendingUp, Calendar, Tag,
+    TrendingUp, Tag,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

@@ -3,17 +3,15 @@ import {
     FolderKanban, Terminal, Clock, CheckSquare,
     BadgeCheck, Shield, Pencil, X, Check,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/profile/StatCard';
 import { useProfile } from '@/hooks/useProfile';
-import { useAuth } from '@/contexts/AuthContext';
 
 export function Profile() {
     const { profile, isLoading, error, updateName } = useProfile();
-    const { user } = useAuth();
 
     // Inline name editor state
     const [editing, setEditing] = useState(false);

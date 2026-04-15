@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
     FolderKanban, Terminal, Clock, CheckSquare,
-    Tag, Globe, ChevronLeft, BookOpen, Calendar,
+    Tag, Globe, BookOpen, Calendar,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/profile/StatCard';
 import { projectStatusConfig } from '@/lib/statusConfig';

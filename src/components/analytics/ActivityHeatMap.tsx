@@ -21,7 +21,7 @@ function cellColor(hours: number): string {
 
 // Build a flat array of {date, hours} for the last WEEKS×7 days
 function buildGrid(daily: DailyActivity[]) {
-    const map = new Map(daily.map((d) => [d.date, d.duration_mins / 60]));
+    const map = new Map(daily.map((d) => [d.date, d.total_mins / 60]));
     const cells: { date: string; hours: number; label: string }[] = [];
     const today = new Date();
 
