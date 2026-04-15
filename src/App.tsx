@@ -4,13 +4,15 @@ import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
 import { Dashboard } from '@/pages/Dashboard';
-import { Placeholder } from '@/pages/Placeholder';
 import { ProjectDetail } from '@/pages/ProjectDetail';
 import { Projects } from '@/pages/Projects';
 import { Tasks } from '@/pages/Tasks';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { Sessions } from './pages/Sessions';
+import { Analytics } from './pages/Analytics';
 import { Journal } from './pages/Journal';
+import { Profile } from './pages/Profile';
+import { PublicProfile } from './pages/PublicProfile';
+import { Sessions } from './pages/Sessions';
 
 export default function App() {
   return (
@@ -20,6 +22,10 @@ export default function App() {
           {/* ── Public routes ─────────────────────────────────── */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          // Public profile sits OUTSIDE ProtectedRoute — no login needed
+          // Add this at the top level, alongside /login and /register:
+          <Route path="/profile/:id" element={<PublicProfile />} />
 
           {/* ── Protected routes ──────────────────────────────── */}
           {/* ProtectedRoute checks auth, then renders Outlet.    */}
@@ -33,8 +39,8 @@ export default function App() {
               <Route path="/tasks" element={<Tasks />} />
               <Route path="/sessions" element={<Sessions />} />
               <Route path="/journal" element={<Journal />} />
-              <Route path="/analytics" element={<Placeholder page="Analytics" />} />
-              <Route path="/profile" element={<Placeholder page="Profile" />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
 

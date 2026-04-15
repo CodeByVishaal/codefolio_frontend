@@ -43,7 +43,7 @@ api.interceptors.response.use(
 
         // Only intercept 401s that haven't already been retried.
         // _retry flag prevents infinite refresh loops.
-        if (error.response?.status === 401 && originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
                 // A refresh is already in progress — queue this request and wait
                 return new Promise((resolve, reject) => {
@@ -59,17 +59,15 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                await axios.post(
-                    `${import.meta.env.VITE_API_URL ?? "http://localhost:8000/api/v1"}/auth/refresh`,
-                    {},
-                    { withCredentials: true }
-                );
+                // Use the configured `api` instance to ensure refresh_token cookie is sent
+                await api.post('/auth/refresh');
 
                 processQueue(null);
                 return api(originalRequest);
             } catch (refreshError) {
                 processQueue(refreshError);
-                window.location.href = "/login";
+                // Don't hard redirect here — let the error propagate so AuthContext
+                // can catch it and set user=null, which triggers ProtectedRoute redirect
                 return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;
