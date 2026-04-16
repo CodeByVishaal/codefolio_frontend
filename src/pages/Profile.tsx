@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
     FolderKanban, Terminal, Clock, CheckSquare,
     BadgeCheck, Shield, Pencil, X, Check,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/profile/StatCard';
@@ -193,12 +194,9 @@ export function Profile() {
                             Share your public projects and journal entries
                         </p>
                     </div>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                    >
-                        <a href={`/profile/${profile.id}`}>View</a>
-                    </Button>
+                    <Link to={`/profile/${profile.id}`} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+                        View
+                    </Link>
                 </CardContent>
             </Card>
         </div>

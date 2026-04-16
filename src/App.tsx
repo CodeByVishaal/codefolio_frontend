@@ -22,9 +22,6 @@ export default function App() {
           {/* ── Public routes ─────────────────────────────────── */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          // Public profile sits OUTSIDE ProtectedRoute — no login needed
-          // Add this at the top level, alongside /login and /register:
           <Route path="/profile/:id" element={<PublicProfile />} />
 
           {/* ── Protected routes ──────────────────────────────── */}
@@ -44,9 +41,13 @@ export default function App() {
             </Route>
           </Route>
 
-          {/* ── Fallback ──────────────────────────────────────── */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          {/* ── Fallback routes ───────────────────────────────── */}
+          {/* Redirect root to dashboard; ProtectedRoute will      */}
+          {/* catch users who aren't authenticated and send them   */}
+          {/* to login. This way unauthenticated access to         */}
+          {/* protected routes always goes through ProtectedRoute. */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
