@@ -1,5 +1,5 @@
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { AuthProvider } from '@/contexts/AuthContext';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
@@ -13,6 +13,20 @@ import { Journal } from './pages/Journal';
 import { Profile } from './pages/Profile';
 import { PublicProfile } from './pages/PublicProfile';
 import { Sessions } from './pages/Sessions';
+
+function RootRedirect() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  return <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />;
+}
 
 export default function App() {
   return (
@@ -42,12 +56,9 @@ export default function App() {
           </Route>
 
           {/* ── Fallback routes ───────────────────────────────── */}
-          {/* Redirect root to dashboard; ProtectedRoute will      */}
-          {/* catch users who aren't authenticated and send them   */}
-          {/* to login. This way unauthenticated access to         */}
-          {/* protected routes always goes through ProtectedRoute. */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {/* Resolve root and unknown paths from auth state       */}
+          <Route path="/" element={<RootRedirect />} />
+          <Route path="*" element={<RootRedirect />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
