@@ -1,9 +1,10 @@
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
 import { Dashboard } from '@/pages/Dashboard';
+import { Landing } from '@/pages/Landing';
 import { ProjectDetail } from '@/pages/ProjectDetail';
 import { Projects } from '@/pages/Projects';
 import { Tasks } from '@/pages/Tasks';
@@ -14,26 +15,13 @@ import { Profile } from './pages/Profile';
 import { PublicProfile } from './pages/PublicProfile';
 import { Sessions } from './pages/Sessions';
 
-function RootRedirect() {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
-  return <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />;
-}
-
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
           {/* ── Public routes ─────────────────────────────────── */}
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile/:id" element={<PublicProfile />} />
@@ -56,9 +44,7 @@ export default function App() {
           </Route>
 
           {/* ── Fallback routes ───────────────────────────────── */}
-          {/* Resolve root and unknown paths from auth state       */}
-          <Route path="/" element={<RootRedirect />} />
-          <Route path="*" element={<RootRedirect />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
