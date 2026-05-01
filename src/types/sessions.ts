@@ -36,6 +36,29 @@ export interface SessionSummary {
     }[];
 }
 
+// ── Session Timer (Quick-Start Mode) ───────────────────────────────────────
+
+export interface SessionTimerState {
+    isRunning: boolean;
+    isPaused: boolean;
+    elapsedMs: number;           // total elapsed milliseconds (includes paused time)
+    startedAt: number;           // timestamp when timer started (ms)
+    pausedAt?: number;           // timestamp when paused (ms)
+    notes: string;               // required
+    projectId?: number | null;   // optional
+    sessionId?: number;          // ID if already saved to backend
+}
+
+export interface SessionTimerInput {
+    notes: string;               // required: at least some context
+    projectId?: number | null;   // optional
+}
+
+export interface SessionTimerDraft {
+    state: SessionTimerState;
+    savedAt: number;             // timestamp for recovery validation
+}
+
 // ── Journal Entry ─────────────────────────────────────────────────────────
 
 export interface JournalEntry {

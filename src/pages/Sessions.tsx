@@ -1,23 +1,45 @@
-import { useState } from 'react';
-import { Clock, Plus, Terminal } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Clock, Plus, Terminal, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { SessionCard } from '@/components/sessions/SessionCard';
 import { SessionFormModal } from '@/components/sessions/SessionFormModal';
+import { SessionTimerModal } from '@/components/sessions/SessionTimerModal';
+import { SessionTimerProvider, useSessionTimer } from '@/contexts/SessionTimerContext';
 import { useSessions } from '@/hooks/useSessions';
 import { useProjects } from '@/hooks/useProjects';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import type { CodingSession } from '@/types/sessions';
 
-export function Sessions() {
-    const { sessions, summary, isLoading, error, createSession, updateSession, deleteSession } = useSessions();
+
+function SessionsContent() {
+    const { sessions, summary, isLoading, error, createSession, updateSession, deleteSession, refresh } = useSessions();
     const { projects } = useProjects();
+    const { pendingResume, resumeFromDraft, discardDraft, isInitialized } = useSessionTimer();
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [timerModalOpen, setTimerModalOpen] = useState(false);
     const [editingSession, setEditingSession] = useState<CodingSession | undefined>(undefined);
 
     const openCreateModal = () => { setEditingSession(undefined); setModalOpen(true); };
+    const openTimerModal = () => { setTimerModalOpen(true); };
     const openEditModal = (s: CodingSession) => { setEditingSession(s); setModalOpen(true); };
     const closeModal = () => { setModalOpen(false); setEditingSession(undefined); };
+    const closeTimerModal = () => { setTimerModalOpen(false); };
+
+    const handleSessionSaved = () => {
+        // Refresh the sessions list after a session is saved
+        refresh();
+    };
 
     // Build a project name lookup map — same pattern as Tasks.tsx
     const projectMap = projects.reduce<Record<number, string>>((acc, p) => {
@@ -27,6 +49,24 @@ export function Sessions() {
 
     return (
         <div className="p-8 space-y-6">
+            {/* Resume timer confirmation dialog */}
+            <AlertDialog open={pendingResume && isInitialized} onOpenChange={() => { }}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Resume previous session?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            You have a session timer that was running when you closed the app. Would you like to resume it?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={discardDraft}>Discard</AlertDialogCancel>
+                        <AlertDialogAction onClick={resumeFromDraft} className="bg-green-600 hover:bg-green-700">
+                            Resume Timer
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
             {/* ── Header ──────────────────────────────────────────────────── */}
             <div className="flex items-center justify-between">
                 <div>
@@ -37,9 +77,14 @@ export function Sessions() {
                             : 'No sessions yet'}
                     </p>
                 </div>
-                <Button onClick={openCreateModal} size="sm" className="gap-1.5">
-                    <Plus size={15} /> Log session
-                </Button>
+                <div className="flex gap-2">
+                    <Button onClick={openTimerModal} size="sm" className="gap-1.5 bg-green-600 hover:bg-green-700">
+                        <Play size={15} /> Quick Start
+                    </Button>
+                    <Button onClick={openCreateModal} size="sm" className="gap-1.5">
+                        <Plus size={15} /> Log session
+                    </Button>
+                </div>
             </div>
 
             {/* ── Summary strip — only shown when data exists ──────────────── */}
@@ -131,6 +176,21 @@ export function Sessions() {
                 onCreate={createSession}
                 onUpdate={updateSession}
             />
+
+            <SessionTimerModal
+                open={timerModalOpen}
+                onClose={closeTimerModal}
+                projects={projects}
+                onSessionSaved={handleSessionSaved}
+            />
         </div>
+    );
+}
+
+export function Sessions() {
+    return (
+        <SessionTimerProvider>
+            <SessionsContent />
+        </SessionTimerProvider>
     );
 }
