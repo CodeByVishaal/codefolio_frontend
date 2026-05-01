@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Pause, Play, Square, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Pause, Play, Square, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
@@ -314,7 +313,7 @@ export function SessionTimerModal({
                                                 optional
                                             </span>
                                         </Label>
-                                        <Select value={projectId} onValueChange={setProjectId}>
+                                        <Select value={projectId} onValueChange={(value) => setProjectId(value ?? 'none')}>
                                             <SelectTrigger id="timer-project">
                                                 <SelectValue placeholder="No project" />
                                             </SelectTrigger>

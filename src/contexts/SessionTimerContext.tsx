@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import type { SessionTimerState, SessionTimerDraft } from '@/types/sessions';
 
 interface SessionTimerContextType {

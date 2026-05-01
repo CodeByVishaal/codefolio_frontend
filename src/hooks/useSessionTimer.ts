@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSessionTimer as useTimerContext } from '@/contexts/SessionTimerContext';
-import type { SessionTimerState } from '@/types/sessions';
 
 interface UseSessionTimerReturn {
     currentElapsedMs: number;
