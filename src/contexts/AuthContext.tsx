@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import { mfaApi } from '@/lib/api/mfa';
 import api from '@/lib/axios';
 import type { AuthContextType, LoginResult, User } from '@/types/auth';
 
@@ -6,7 +7,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState(true); // true while we check the session
+    const [isLoading, setIsLoading] = useState(true);
     const authRequestIdRef = useRef(0);
 
     const beginAuthRequest = () => {
@@ -21,11 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
     };
 
-    // ── Session restoration on page load ─────────────────────────────────────
-    // Fires once when the app mounts. If the access_token cookie is valid,
-    // FastAPI returns the user and we populate state. If it's expired, the
-    // axios interceptor will try to refresh it first. If that also fails,
-    // the catch block sets user to null.
+    const loadCurrentUser = async (requestId: number) => {
+        const userRes = await api.get<User>('/users/me');
+        finishAuthRequest(requestId, userRes.data);
+    };
+
     useEffect(() => {
         const requestId = beginAuthRequest();
 
@@ -34,25 +35,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .catch(() => finishAuthRequest(requestId, null));
     }, []);
 
-    // ── Auth actions ──────────────────────────────────────────────────────────
-
     const login = async (email: string, password: string): Promise<LoginResult> => {
         const requestId = beginAuthRequest();
 
         try {
             const res = await api.post('/auth/login', { email, password });
 
-            if (res.data.requires_2fa) {
-            // Don't set user yet — 2FA still needs to be verified
+            if (res.data.requires_2fa || res.data.requires_mfa) {
                 if (authRequestIdRef.current === requestId) {
                     setIsLoading(false);
                 }
-                return { requires_2fa: true, challenge_token: res.data.challenge_token };
+
+                return {
+                    requires_2fa: true,
+                    requires_mfa: true,
+                    challenge_token: res.data.challenge_token,
+                    expires_in: res.data.expires_in,
+                };
             }
 
-            const userRes = await api.get<User>('/users/me');
-            finishAuthRequest(requestId, userRes.data);
+            await loadCurrentUser(requestId);
             return { success: true };
+        } catch (error) {
+            if (authRequestIdRef.current === requestId) {
+                setIsLoading(false);
+            }
+            throw error;
+        }
+    };
+
+    const verifyMfa = async (
+        challengeToken: string,
+        factor: { code?: string; recoveryCode?: string },
+    ): Promise<void> => {
+        const requestId = beginAuthRequest();
+
+        try {
+            await mfaApi.verify({
+                challenge_token: challengeToken,
+                code: factor.code,
+                recovery_code: factor.recoveryCode,
+            });
+            await loadCurrentUser(requestId);
         } catch (error) {
             if (authRequestIdRef.current === requestId) {
                 setIsLoading(false);
@@ -66,8 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         try {
             await api.post('/auth/register', { name, email, password });
-            const userRes = await api.get<User>('/users/me');
-            finishAuthRequest(requestId, userRes.data);
+            await loadCurrentUser(requestId);
         } catch (error) {
             if (authRequestIdRef.current === requestId) {
                 setIsLoading(false);
@@ -93,6 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 isLoading,
                 isAuthenticated: !!user,
                 login,
+                verifyMfa,
                 register,
                 logout,
             }}
@@ -102,8 +126,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 }
 
-// Custom hook — throws a clear error if you accidentally use it outside
-// the provider (common beginner mistake that produces confusing errors)
 export function useAuth(): AuthContextType {
     const ctx = useContext(AuthContext);
     if (!ctx) throw new Error('useAuth() must be used inside <AuthProvider>');

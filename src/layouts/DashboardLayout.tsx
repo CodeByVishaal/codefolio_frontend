@@ -5,10 +5,7 @@ export function DashboardLayout() {
     return (
         <div className="min-h-screen bg-background">
             <Sidebar />
-            <main
-                style={{ marginLeft: 'var(--sidebar-width)' }}
-                className="min-h-screen"
-            >
+            <main className="min-h-screen md:ml-[var(--sidebar-width)]">
                 <Outlet />
             </main>
         </div>

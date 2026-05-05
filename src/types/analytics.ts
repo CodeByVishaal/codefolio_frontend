@@ -49,6 +49,7 @@ export interface PrivateProfile {
     email: string;
     role: 'admin' | 'developer';
     is_verified: boolean;
+    mfa_enabled: boolean;
     created_at: string;
     total_projects: number;
     total_sessions: number;

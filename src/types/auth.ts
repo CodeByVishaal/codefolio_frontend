@@ -4,6 +4,7 @@ export interface User {
     email: string;
     role: 'admin' | 'developer';
     is_verified: boolean;
+    mfa_enabled: boolean;
     created_at: string;
 }
 
@@ -11,13 +12,19 @@ export interface User {
 // is issued (success: true), or 2FA is required first.
 export type LoginResult =
     | { success: true }
-    | { requires_2fa: true; challenge_token: string };
+    | {
+        requires_2fa: true;
+        requires_mfa?: true;
+        challenge_token: string;
+        expires_in?: number;
+    };
 
 export interface AuthContextType {
     user: User | null;
     isLoading: boolean;
     isAuthenticated: boolean;
     login: (email: string, password: string) => Promise<LoginResult>;
+    verifyMfa: (challengeToken: string, factor: { code?: string; recoveryCode?: string }) => Promise<void>;
     register: (name: string, email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }

@@ -31,6 +31,18 @@ function processQueue(error: unknown) {
     failedQueue = [];
 }
 
+function shouldAttemptRefresh(url?: string): boolean {
+    if (!url) return true;
+
+    const refreshExcludedPaths = [
+        '/auth/login',
+        '/auth/register',
+        '/auth/mfa/verify',
+    ];
+
+    return !refreshExcludedPaths.some((path) => url.includes(path));
+}
+
 // ── Response interceptor ──────────────────────────────────────────────────────
 
 api.interceptors.response.use(
@@ -43,7 +55,7 @@ api.interceptors.response.use(
 
         // Only intercept 401s that haven't already been retried.
         // _retry flag prevents infinite refresh loops.
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry && shouldAttemptRefresh(originalRequest.url)) {
             if (isRefreshing) {
                 // A refresh is already in progress — queue this request and wait
                 return new Promise((resolve, reject) => {

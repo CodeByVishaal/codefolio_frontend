@@ -3,6 +3,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
+import { VerifyMfa } from '@/pages/auth/VerifyMfa';
 import { Dashboard } from '@/pages/Dashboard';
 import { Landing } from '@/pages/Landing';
 import { ProjectDetail } from '@/pages/ProjectDetail';
@@ -24,6 +25,8 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-mfa" element={<VerifyMfa />} />
+          <Route path="/verify-2fa" element={<VerifyMfa />} />
           <Route path="/profile/:id" element={<PublicProfile />} />
 
           {/* ── Protected routes ──────────────────────────────── */}
