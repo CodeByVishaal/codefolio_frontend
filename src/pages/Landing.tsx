@@ -46,7 +46,7 @@ const contactCards = [
         title: 'Have product feedback?',
         text: 'Share ideas, workflow pain points, or feature requests with your team inbox and shape the next iteration.',
         cta: 'Start the conversation',
-        href: 'mailto:contact@codefolio.app',
+        href: 'mailto:vishalind3@gmail.com',
     },
 ];
 
